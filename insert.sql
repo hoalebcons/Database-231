@@ -73,17 +73,17 @@ VALUES
 (3, 4),
 (5, 3);
 
-INSERT INTO Items (Item_ID, Current_Price,Note)
+INSERT INTO Items (Item_ID, Current_Price,Type)
 VALUES
-(1, 30000,'Ghi chú 1'),
-(2, 40000,'Ghi chú 2'),
-(3, 30000,'Ghi chú 3'),
-(4, 40000,'Ghi chú 4'),
-(5, 30000,'Ghi chú 5'),
-(6, 40000,'Ghi chú 6'),
-(7, 30000,'Ghi chú 7'),
-(8, 40000,'Ghi chú 8'),
-(9, 50000,'Ghi chú 8');
+('P1', 30000,'Product'),
+('P2', 40000,'Product'),
+('P3', 30000,'Product'),
+('P4', 40000,'Product'),
+('P5', 30000,'Product'),
+('P6', 40000,'Product'),
+('P7', 30000,'Product'),
+('P8', 40000,'Product'),
+('C1', 50000,'Combo');
 
 INSERT INTO Food (FoodType)
 VALUES
@@ -95,18 +95,18 @@ VALUES
 
 INSERT INTO Product (Name, Price, Description, Photo, Size, Item_ID,Food_ID,Beverage_ID)
 VALUES
-('Cà phê', 30000.00, 'Cà phê phin truyền thống', 'ca_phe_vn.jpg','M',1,NULL,1),
-('Cà phê', 40000.00, 'Cà phê phin truyền thống', 'ca_phe_vn.jpg','L',2,NULL,1),
-('Trà Sữa', 30000.00, 'Trà sữa trân châu đường đen', 'tra_sua.jpg','M',3,NULL,1),
-('Trà Sữa', 40000.00, 'Trà sữa trân châu đường đen', 'tra_sua.jpg','L',4,NULL,1),
-('Bánh mì', 30000.00, 'Bánh mì chà bông', 'banh_mi.jpg','M',5,1,NULL),
-('Bánh mì', 40000.00, 'Bánh mì chà bông', 'banh_mi.jpg','L',6,1,NULL),
-('Bánh kem', 30000.00, 'Bánh kem Tiramisu', 'banhkem.jpg','M',7,1,NULL),
-('Bánh kem', 40000.00, 'Bánh kem Tiramisu', 'banhkem.jpg','L',8,1,NULL);
+('Cà phê', 30000.00, 'Cà phê phin truyền thống', 'ca_phe_vn.jpg','M','P1',NULL,1),
+('Cà phê', 40000.00, 'Cà phê phin truyền thống', 'ca_phe_vn.jpg','L','P2',NULL,1),
+('Trà Sữa', 30000.00, 'Trà sữa trân châu đường đen', 'tra_sua.jpg','M','P3',NULL,1),
+('Trà Sữa', 40000.00, 'Trà sữa trân châu đường đen', 'tra_sua.jpg','L','P4',NULL,1),
+('Bánh mì', 30000.00, 'Bánh mì chà bông', 'banh_mi.jpg','M','P5',1,NULL),
+('Bánh mì', 40000.00, 'Bánh mì chà bông', 'banh_mi.jpg','L','P6',1,NULL),
+('Bánh kem', 30000.00, 'Bánh kem Tiramisu', 'banhkem.jpg','M','P7',1,NULL),
+('Bánh kem', 40000.00, 'Bánh kem Tiramisu', 'banhkem.jpg','L','P8',1,NULL);
 
 INSERT INTO Combo (Name, Description, Price, Photo, Item_ID)
 VALUES
-('Combo Sáng','Cà phê và bánh mì',50000.00,'combosang.jpg',9);
+('Combo Sáng','Cà phê và bánh mì',50000.00,'combosang.jpg','C1');
 
 INSERT INTO Combo_List (Combo_ID, Product_ID, Quantity)
 VALUES
@@ -123,34 +123,28 @@ VALUES
 
 INSERT INTO Order_Line (Order_ID, Item_ID, Quantity, Total_Price)
 VALUES
-(1, 2, 2, 80000),
-(1, 4, 1, 40000),
-(2, 6, 1, 50000),
-(2, 1, 1, 30000),
-(2, 3, 2, 60000),
-(4, 3, 1, 30000),
-(5, 4, 1, 40000);
+(1, 'P2', 2, 80000),
+(1, 'P4', 1, 40000),
+(2, 'P6', 1, 50000),
+(2, 'P1', 1, 30000),
+(2, 'P3', 2, 60000),
+(4, 'P3', 1, 30000),
+(5, 'P4', 1, 40000);
 
 
-INSERT INTO Bill (Feedback, Customer_ID, Order_ID, Total_Price, Method, Bill_Date)
+INSERT INTO Bill (Feedback, Customer_ID, Order_ID, Total_Price, Method, Bill_Date,Promotion_ID, Discount_Price, Discount_Percent, Delivery_Fee)
 VALUES
-('Rất hài lòng', 1, 1, 100000, 'CASH', '2023-11-22'),
-('Tốt, nhưng cần cải thiện', 2, 2, 150000, 'MOMO', '2023-11-24'),
-('Tốt, nhưng cần cải thiện', 4, 4, 30000, 'MOMO', '2023-11-28'),
-('Bình thường', 5, 5, 40000, 'BANKING', '2023-11-30');
+('Rất hài lòng', 1, 1, 120000, 'CASH', '2023-11-22',1, 20000, 10.00,20000),
+('Tốt, nhưng cần cải thiện', 2, 2, 180000, 'MOMO', '2023-11-24',3, 10000, 15.00,30000),
+('Tốt, nhưng cần cải thiện', 4, 4, 45000, 'MOMO', '2023-11-28',NULL,0,0,15000),
+('Bình thường', 5, 5, 60000, 'BANKING', '2023-11-30',NULL,0,0,20000);
 
-INSERT INTO Discount (Bill_ID, Promotion_ID, Discount_Price, Discount_Percent)
+INSERT INTO Transport (Bill_ID, Delivery_ID, Delivery_Date, Shipper_Name, Shipper_Phone, Shipper_Vehicle, Shipper_VehicleID)
 VALUES
-(1, 1, 20000, 10.00),
-(2, 3, 10000, 15.00);
-
-
-INSERT INTO Transport (Bill_ID, Delivery_ID, Delivery_Fee, Delivery_Date, Shipper_Name, Shipper_Phone, Shipper_Vehicle, Shipper_VehicleID)
-VALUES
-(1, 1, 20000.00, '2023-11-28', 'Nguyễn Văn A', '0123456789', 'Xe máy', '59A1-123.45'),
-(2, 1, 30000.00, '2023-11-29', 'Lê Thị B', '0123456790', 'Xe máy', '59C2-678.90'),
-(3, 2, 30000.00, '2023-11-30', 'Trần Văn C', '0123456791', 'Xe máy', '59A3-234.56'),
-(4, 3, 20000.00, '2023-12-01', 'Phạm Thị D', '0123456792', 'Xe máy', '59D4-789.01');
+(1, 1, '2023-11-28', 'Nguyễn Văn A', '0123456789', 'Xe máy', '59A1-123.45'),
+(2, 1, '2023-11-29', 'Lê Thị B', '0123456790', 'Xe máy', '59C2-678.90'),
+(3, 2, '2023-11-30', 'Trần Văn C', '0123456791', 'Xe máy', '59A3-234.56'),
+(4, 3, '2023-12-01', 'Phạm Thị D', '0123456792', 'Xe máy', '59D4-789.01');
 
 
 

@@ -64,7 +64,7 @@ CREATE TABLE `Order` (
     Order_ID INT AUTO_INCREMENT PRIMARY KEY,
     Order_Date DATETIME NOT NULL,
     Note TEXT,
-    Status ENUM('PROCESSING', 'COMPLETED', 'CANCELLED') NOT NULL,
+    Status ENUM('PROCESSING', 'CONFIRMED', 'COMPLETED', 'CANCELLED') NOT NULL,
     Total_Price DECIMAL(10, 2) NOT NULL,
     Customer_ID INT,
     Cashier_ID INT,
@@ -80,16 +80,21 @@ CREATE TABLE Bill (
     Customer_ID INT,
     Order_ID INT NOT NULL,
     Bill_Date DATE NOT NULL,
+    Delivery_Fee DECIMAL(10, 2) NOT NULL,
     Total_Price DECIMAL(10, 2) NOT NULL,
     Method ENUM('CASH', 'MOMO', 'BANKING') NOT NULL,
+    Promotion_ID INT,
+    Discount_Price DECIMAL(10, 2),
+    Discount_Percent DECIMAL(5, 2),
+    FOREIGN KEY (Promotion_ID) REFERENCES Promotion(Promotion_ID),
     FOREIGN KEY (Customer_ID) REFERENCES Customer(Customer_ID),
     FOREIGN KEY (Order_ID) REFERENCES `Order`(Order_ID)
 );
 
 CREATE TABLE Items (
-    Item_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Item_ID VARCHAR(10) PRIMARY KEY,
     Current_Price DECIMAL(10, 2) NOT NULL,
-    Note TEXT
+    `Type` ENUM('Product', 'Combo') NOT NULL
 );
 
 CREATE TABLE Beverage (
@@ -108,7 +113,7 @@ CREATE TABLE Product (
     Price DECIMAL(10, 2) NOT NULL,
     Description TEXT,
     Photo VARCHAR(255),
-    Item_ID INT,
+    Item_ID VARCHAR(10),
     Size VARCHAR(5),
     Food_ID INT,
     Beverage_ID INT,
@@ -123,7 +128,7 @@ CREATE TABLE Combo (
     Description TEXT,
     Price DECIMAL(10, 2) NOT NULL,
     Photo VARCHAR(255),
-    Item_ID INT,
+    Item_ID VARCHAR(10),
     FOREIGN KEY (Item_ID) REFERENCES Items(Item_ID)
 );
 
@@ -132,7 +137,6 @@ CREATE TABLE Combo (
 CREATE TABLE Transport (
     Bill_ID INT,
     Delivery_ID INT,
-    Delivery_Fee DECIMAL(10, 2),
     Delivery_Date DATE,
     Shipper_Name VARCHAR(255),
     Shipper_Phone VARCHAR(20),
@@ -151,19 +155,9 @@ CREATE TABLE Event (
     FOREIGN KEY (Promotion_ID) REFERENCES Promotion(Promotion_ID)
 );
 
-CREATE TABLE Discount (
-    Bill_ID INT,
-    Promotion_ID INT,
-    Discount_Price DECIMAL(10, 2),
-    Discount_Percent DECIMAL(5, 2),
-    PRIMARY KEY (Bill_ID, Promotion_ID),
-    FOREIGN KEY (Bill_ID) REFERENCES Bill(Bill_ID),
-    FOREIGN KEY (Promotion_ID) REFERENCES Promotion(Promotion_ID)
-);
-
 CREATE TABLE Order_Line (
     Order_ID INT,
-    Item_ID INT,
+    Item_ID VARCHAR(10),
     Quantity INT NOT NULL,
     Total_Price DECIMAL(10, 2) NOT NULL,
     PRIMARY KEY (Order_ID, Item_ID),
